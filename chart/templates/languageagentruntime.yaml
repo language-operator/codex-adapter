@@ -12,8 +12,9 @@ spec:
 
   # Authentication is handled entirely by the cluster OIDC proxy — this is the
   # sole auth gate. When the cluster enables auth, agents using this runtime sit
-  # behind the injected oauth2-proxy sidecar. Codex reaches the model gateway
-  # through the config the emitter writes to CODEX_HOME.
+  # behind the injected oauth2-proxy sidecar. Codex authenticates to OpenAI
+  # itself (a ChatGPT login kept in CODEX_HOME, or an API key) rather than going
+  # through the cluster gateway.
   auth:
     enabled: {{ .Values.auth.enabled }}
 

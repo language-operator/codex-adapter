@@ -44,8 +44,18 @@ jobs:
       # tmpfs /tmp. Checks doctor, that seeding is idempotent and writes nothing
       # outside /tmp and /workspace, the probe endpoints, manifest redaction, the
       # cross-origin WebSocket guard, and that a keystroke reaches the program
-      # under tmux. No tolerated failures.
+      # under tmux.
+      #
+      # CONFORMANCE_SKIP declares the one check Codex cannot pass: it types text
+      # into the tmux pane and greps for it, and an uncredentialed Codex sits on
+      # its sign-in menu, which renders none of it — and quits on the probe's `q`.
+      # Codex authenticates itself (a ChatGPT login or an API key), so CI has no
+      # credential to get past that screen. The suite still runs the check and
+      # fails this job if it starts passing — or if the declaration ever stops
+      # matching a real check — so the declaration cannot outlive its reason.
       - name: Run conformance suite
+        env:
+          CONFORMANCE_SKIP: a keystroke reaches the program under tmux
         run: ./conformance.sh codex-adapter:test adapter
 
   chart-lint:

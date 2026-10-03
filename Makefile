@@ -28,7 +28,10 @@ test: build
 	docker run --rm --entrypoint cat $(IMAGE):$(TAG) \
 		/opt/coding-runtime/test/conformance.sh > $(CONFORMANCE)
 	chmod +x $(CONFORMANCE)
-	$(CONFORMANCE) $(IMAGE):$(TAG) adapter
+	@# Same declared skip as test.yaml, and for the same reason: an uncredentialed
+	@# Codex sits on its sign-in menu, so typed text never reaches a prompt.
+	CONFORMANCE_SKIP='a keystroke reaches the program under tmux' \
+		./$(CONFORMANCE) $(IMAGE):$(TAG) adapter
 
 # Both halves of the chart-lint CI job. claude-code-adapter's target lints only;
 # templating too is what the workflow actually does, so this matches CI instead.

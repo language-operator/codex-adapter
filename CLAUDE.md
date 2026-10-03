@@ -29,8 +29,9 @@ it.
 - `runtime.json` — the manifest: `CODEX_HOME` (`${STATE_DIR}/codex`), the serving
   surface, how tmux launches the TUI.
 - `emit.mjs` — the emitter: normalized config → files under `CODEX_HOME`. Today it writes
-  only the standing instructions, to `CODEX_HOME/AGENTS.md`; the gateway, models and MCP
-  servers in `config.toml` are issue #1.
+  only the standing instructions, to `CODEX_HOME/AGENTS.md`; auth, model and MCP servers
+  in `config.toml` are issue #1. Like claude-code, Codex authenticates itself (a ChatGPT
+  login or an API key) rather than going through the cluster gateway.
 - Both are **owned by this repo**. coding-runtime ships no `examples/codex`, so unlike the other
   adapters on this base there is no upstream copy to re-sync — check new base
   releases for manifest or emitter-contract changes by hand.

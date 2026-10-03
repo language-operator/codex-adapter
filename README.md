@@ -22,8 +22,8 @@ config. What lives here is the three files that describe Codex to it:
   serving surface, and how tmux launches the TUI.
 - **`emit.mjs`** — the emitter: normalized config → files under `CODEX_HOME`. Agent
   **instructions** are written to `CODEX_HOME/AGENTS.md`, which Codex loads as
-  standing context for every session — no async seeding, no timing. Translating the
-  gateway, models and MCP servers into `config.toml` is
+  standing context for every session — no async seeding, no timing. Auth, model and
+  MCP servers in `config.toml` are
   [#1](https://github.com/language-operator/codex-adapter/issues/1).
 - **`launch-codex.sh`** — what tmux runs. The base has already set the working
   directory (the cloned repo when the agent sets `spec.repository`, else
@@ -64,8 +64,11 @@ The runtime sets `auth.enabled: true`, so access is gated entirely by the cluste
 OIDC proxy: when the `LanguageCluster` has auth enabled the operator injects an
 oauth2-proxy sidecar in front of the terminal. There is no built-in password — if
 the cluster does not enable auth, the terminal is exposed unauthenticated on its
-ingress. Codex reaches the model gateway through the config seeded into
-`CODEX_HOME` ([#1](https://github.com/language-operator/codex-adapter/issues/1)).
+ingress. Codex authenticates to OpenAI itself, like Claude Code, rather than through
+the cluster gateway: a ChatGPT login from the browser terminal, kept in `CODEX_HOME` on
+the workspace volume, or an API key
+([#1](https://github.com/language-operator/codex-adapter/issues/1)). Agents need
+outbound HTTPS to OpenAI.
 
 ## Development
 

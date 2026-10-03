@@ -3,8 +3,9 @@
  *
  * Codex reads everything from CODEX_HOME, which runtime.json points at
  * $STATE_DIR/codex on the workspace volume. So far this writes only the agent's
- * standing instructions; translating the gateway, models and MCP servers into
- * CODEX_HOME/config.toml is issue #1.
+ * standing instructions; auth, model and MCP servers in CODEX_HOME/config.toml
+ * are issue #1. Like claude-code, Codex authenticates itself rather than going
+ * through the cluster gateway, so `config.gateway` goes unused here.
  */
 
 export function emit(config) {
