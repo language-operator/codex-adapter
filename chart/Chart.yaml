@@ -1,17 +1,17 @@
 apiVersion: v2
-name: opencode
-description: opencode LanguageAgentRuntime for the Language Operator
+name: codex
+description: Codex CLI LanguageAgentRuntime for the Language Operator
 type: application
-version: 0.1.7
-appVersion: "0.1.7"
+version: 0.1.0
+appVersion: "0.1.0"
 keywords:
   - ai
   - llm
   - agents
-  - opencode
-home: https://github.com/language-operator/opencode-adapter
+  - codex
+home: https://github.com/language-operator/codex-adapter
 sources:
-  - https://github.com/language-operator/opencode-adapter
+  - https://github.com/language-operator/codex-adapter
 maintainers:
   - name: James Ryan
     email: james@theryans.io
