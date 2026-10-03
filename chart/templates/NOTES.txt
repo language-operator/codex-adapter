@@ -1,4 +1,4 @@
-opencode LanguageAgentRuntime installed.
+Codex CLI LanguageAgentRuntime installed.
 
 Prerequisite: the `language-operator` chart must be installed first (it provides
 the LanguageAgentRuntime CRD). Installing against a cluster without the CRD fails.
@@ -11,7 +11,7 @@ namespace via spec.runtime:
   metadata:
     name: my-agent
   spec:
-    runtime: opencode
+    runtime: codex
 
 Image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
 
@@ -20,5 +20,6 @@ http://<agent-name>.<namespace>.svc.cluster.local:{{ .Values.port }}. From a bro
 is reached through the cluster ingress, behind the OIDC proxy when the LanguageCluster
 enables auth.
 
-No interactive login: opencode reaches the model gateway using the provider config
-written to opencode.jsonc at startup.
+Codex authenticates to OpenAI itself, not through the cluster gateway: sign in from
+the browser terminal (the login is kept in CODEX_HOME on the workspace volume), or
+provide an API key. Agents need outbound HTTPS to OpenAI.

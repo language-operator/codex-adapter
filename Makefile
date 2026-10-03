@@ -1,11 +1,11 @@
 REGISTRY  := ghcr.io/language-operator
-IMAGE     := $(REGISTRY)/opencode-adapter
+IMAGE     := $(REGISTRY)/codex-adapter
 GIT_SHA   := $(shell git rev-parse --short HEAD)
 TAG       ?= $(GIT_SHA)
 
 # Helm release coordinates for the local dev deploy.
 NAMESPACE ?= language-operator
-RELEASE   ?= opencode
+RELEASE   ?= codex
 
 # Scratch path for the suite extracted from the image; not checked in.
 CONFORMANCE := .conformance.sh
@@ -28,13 +28,16 @@ test: build
 	docker run --rm --entrypoint cat $(IMAGE):$(TAG) \
 		/opt/coding-runtime/test/conformance.sh > $(CONFORMANCE)
 	chmod +x $(CONFORMANCE)
-	$(CONFORMANCE) $(IMAGE):$(TAG) adapter
+	@# Same declared skip as test.yaml, and for the same reason: an uncredentialed
+	@# Codex sits on its sign-in menu, so typed text never reaches a prompt.
+	CONFORMANCE_SKIP='a keystroke reaches the program under tmux' \
+		./$(CONFORMANCE) $(IMAGE):$(TAG) adapter
 
 # Both halves of the chart-lint CI job. claude-code-adapter's target lints only;
 # templating too is what the workflow actually does, so this matches CI instead.
 lint-chart:
 	helm lint chart
-	helm template opencode chart >/dev/null
+	helm template codex chart >/dev/null
 
 # Build, load the adapter image into k3s, and upgrade the runtime release
 # referencing the freshly built image (development inner loop).
@@ -45,7 +48,7 @@ lint-chart:
 # pods onto the new adapter image; pullPolicy=Never uses the imported copy.
 dev: build
 	docker save $(IMAGE):$(TAG) | sudo k3s ctr images import -
-	@# The opencode LanguageAgentRuntime is cluster-scoped and may already exist,
+	@# The codex LanguageAgentRuntime is cluster-scoped and may already exist,
 	@# owned by the umbrella language-operator-runtimes chart. Adopting it into this
 	@# release leaves helm's 3-way merge unable to update the image, so delete it
 	@# first and let helm recreate it fresh with the locally built image.
